@@ -142,8 +142,12 @@ export default function Game() {
       ctx.font = "24px Arial";
       ctx.fillText("Wojak is tired of losing crypto trade!", canvas.width/2, canvas.height/2 - 40);
       ctx.fillText("That's why he's shooting the crypto coins!", canvas.width/2, canvas.height/2 - 10);
-      ctx.fillText("Use WASD or arrow keys to move, mouse to shoot", canvas.width/2, canvas.height/2 + 20);
-      ctx.fillText("Click to Play", canvas.width/2, canvas.height/2 + 50);
+      ctx.fillText("Use WASD or arrow keys to move, mouse to shoot", canvas.width/2, canvas.height/2 + 30);
+      ctx.fillStyle = "#1e40af";
+      ctx.fillRect(canvas.width/2 - 80, canvas.height/2 + 60, 160, 40);
+      ctx.fillStyle = "white";
+      ctx.font = "20px Arial";
+      ctx.fillText("Click to Play", canvas.width/2, canvas.height/2 + 85);
     };
 
     const drawGameOver = () => {

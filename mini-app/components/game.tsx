@@ -194,5 +194,5 @@ export default function Game() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} id="gameCanvas" width={800} height={600} />;
+  return <canvas ref={canvasRef} id="gameCanvas" width={600} height={600} style={{ maxWidth: '100%' }} />;
 }

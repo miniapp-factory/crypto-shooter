@@ -2,6 +2,23 @@
 
 import { useEffect, useRef } from "react";
 
+interface Enemy {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  img: HTMLImageElement;
+}
+
+interface Bullet {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  dx: number;
+  dy: number;
+}
+
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -23,8 +40,8 @@ export default function Game() {
     const playerImg = new Image();
     playerImg.src = "https://raw.githubusercontent.com/weatherfu/wojak/refs/heads/master/wj(3).jpg";
 
-    let enemies: any[] = [];
-    let bullets: any[] = [];
+    let enemies: Enemy[] = [];
+    let bullets: Bullet[] = [];
     let score = 0;
     let lives = 3;
     let gameState = "menu";
@@ -87,20 +104,20 @@ export default function Game() {
       player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
       player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
 
-      bullets.forEach((b: any, i: number) => {
+      bullets.forEach((b: Bullet, i: number) => {
         b.x += b.dx;
         b.y += b.dy;
         if (b.x < 0 || b.x > canvas.width || b.y < 0 || b.y > canvas.height) bullets.splice(i, 1);
       });
 
-      enemies.forEach((e: any, i: number) => {
+      enemies.forEach((e: Enemy, i: number) => {
         const dx = player.x - e.x;
         const dy = player.y - e.y;
         const dist = Math.hypot(dx, dy);
         e.x += dx / dist * 1.5;
         e.y += dy / dist * 1.5;
 
-        bullets.forEach((b: any, j: number) => {
+        bullets.forEach((b: Bullet, j: number) => {
           if (b.x < e.x + e.width && b.x + b.width > e.x && b.y < e.y + e.height && b.y + b.height > e.y) {
             enemies.splice(i, 1);
             bullets.splice(j, 1);

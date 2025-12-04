@@ -80,6 +80,14 @@ export default function Game() {
       };
     };
 
+    const fireBullet = () => {
+      if (gameState !== "playing") return;
+      const mx = player.x + player.width / 2;
+      const my = player.y + player.height / 2;
+      const angle = 0; // straight up
+      bullets.push({ x: mx, y: my, width: 10, height: 10, dx: Math.cos(angle) * 8, dy: Math.sin(angle) * 8 });
+    };
+
     const shootBullet = (e: MouseEvent) => {
       if (gameState !== "playing") return;
       const rect = canvas.getBoundingClientRect();
@@ -194,5 +202,104 @@ export default function Game() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} id="gameCanvas" width={600} height={600} style={{ maxWidth: '100%' }} />;
+  return (
+    <div style={{ position: 'relative', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
+      <canvas ref={canvasRef} id="gameCanvas" width={600} height={600} style={{ maxWidth: '100%' }} />
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          gap: '10px',
+          pointerEvents: 'none',
+        }}
+      >
+        <button
+          style={{
+            width: '50px',
+            height: '50px',
+            borderRadius: '25px',
+            background: '#1e40af',
+            color: 'white',
+            fontSize: '24px',
+            pointerEvents: 'auto',
+          }}
+          onTouchStart={(e) => { e.preventDefault(); keys['ArrowUp'] = true; }}
+          onTouchEnd={(e) => { e.preventDefault(); keys['ArrowUp'] = false; }}
+          onMouseDown={() => { keys['ArrowUp'] = true; }}
+          onMouseUp={() => { keys['ArrowUp'] = false; }}
+        >
+          ⬆️
+        </button>
+        <button
+          style={{
+            width: '50px',
+            height: '50px',
+            borderRadius: '25px',
+            background: '#1e40af',
+            color: 'white',
+            fontSize: '24px',
+            pointerEvents: 'auto',
+          }}
+          onTouchStart={(e) => { e.preventDefault(); keys['ArrowDown'] = true; }}
+          onTouchEnd={(e) => { e.preventDefault(); keys['ArrowDown'] = false; }}
+          onMouseDown={() => { keys['ArrowDown'] = true; }}
+          onMouseUp={() => { keys['ArrowDown'] = false; }}
+        >
+          ⬇️
+        </button>
+        <button
+          style={{
+            width: '50px',
+            height: '50px',
+            borderRadius: '25px',
+            background: '#1e40af',
+            color: 'white',
+            fontSize: '24px',
+            pointerEvents: 'auto',
+          }}
+          onTouchStart={(e) => { e.preventDefault(); keys['ArrowLeft'] = true; }}
+          onTouchEnd={(e) => { e.preventDefault(); keys['ArrowLeft'] = false; }}
+          onMouseDown={() => { keys['ArrowLeft'] = true; }}
+          onMouseUp={() => { keys['ArrowLeft'] = false; }}
+        >
+          ⬅️
+        </button>
+        <button
+          style={{
+            width: '50px',
+            height: '50px',
+            borderRadius: '25px',
+            background: '#1e40af',
+            color: 'white',
+            fontSize: '24px',
+            pointerEvents: 'auto',
+          }}
+          onTouchStart={(e) => { e.preventDefault(); keys['ArrowRight'] = true; }}
+          onTouchEnd={(e) => { e.preventDefault(); keys['ArrowRight'] = false; }}
+          onMouseDown={() => { keys['ArrowRight'] = true; }}
+          onMouseUp={() => { keys['ArrowRight'] = false; }}
+        >
+          ➡️
+        </button>
+        <button
+          style={{
+            width: '60px',
+            height: '60px',
+            borderRadius: '30px',
+            background: '#e11d48',
+            color: 'white',
+            fontSize: '28px',
+            pointerEvents: 'auto',
+          }}
+          onTouchStart={(e) => { e.preventDefault(); fireBullet(); }}
+          onMouseDown={() => { fireBullet(); }}
+        >
+          🔫
+        </button>
+      </div>
+    </div>
+  );
 }

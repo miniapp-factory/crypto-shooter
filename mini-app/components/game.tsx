@@ -21,6 +21,8 @@ interface Bullet {
 
 export default function Game() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const keysRef = useRef<Record<string, boolean>>({});
+  const fireBulletRef = useRef<() => void>();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -47,7 +49,6 @@ export default function Game() {
     let gameState = "menu";
 
     const player = { x: canvas.width / 2 - 40, y: canvas.height / 2 - 40, width: 80, height: 80, speed: 5 };
-    const keys: Record<string, boolean> = {};
 
     const handleKeyDown = (e: KeyboardEvent) => { keys[e.key] = true; };
     const handleKeyUp = (e: KeyboardEvent) => { keys[e.key] = false; };
@@ -87,6 +88,7 @@ export default function Game() {
       const angle = 0; // straight up
       bullets.push({ x: mx, y: my, width: 10, height: 10, dx: Math.cos(angle) * 8, dy: Math.sin(angle) * 8 });
     };
+    fireBulletRef.current = fireBullet;
 
     const shootBullet = (e: MouseEvent) => {
       if (gameState !== "playing") return;
@@ -105,10 +107,10 @@ export default function Game() {
 
     const update = () => {
       if (gameState !== "playing") return;
-      if (keys['ArrowUp'] || keys['w']) player.y -= player.speed;
-      if (keys['ArrowDown'] || keys['s']) player.y += player.speed;
-      if (keys['ArrowLeft'] || keys['a']) player.x -= player.speed;
-      if (keys['ArrowRight'] || keys['d']) player.x += player.speed;
+      if (keysRef.current['ArrowUp'] || keysRef.current['w']) player.y -= player.speed;
+      if (keysRef.current['ArrowDown'] || keysRef.current['s']) player.y += player.speed;
+      if (keysRef.current['ArrowLeft'] || keysRef.current['a']) player.x -= player.speed;
+      if (keysRef.current['ArrowRight'] || keysRef.current['d']) player.x += player.speed;
       player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
       player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
 
@@ -226,10 +228,10 @@ export default function Game() {
             fontSize: '24px',
             pointerEvents: 'auto',
           }}
-          onTouchStart={(e) => { e.preventDefault(); keys['ArrowUp'] = true; }}
-          onTouchEnd={(e) => { e.preventDefault(); keys['ArrowUp'] = false; }}
-          onMouseDown={() => { keys['ArrowUp'] = true; }}
-          onMouseUp={() => { keys['ArrowUp'] = false; }}
+          onTouchStart={(e) => { e.preventDefault(); keysRef.current['ArrowUp'] = true; }}
+          onTouchEnd={(e) => { e.preventDefault(); keysRef.current['ArrowUp'] = false; }}
+          onMouseDown={() => { keysRef.current['ArrowUp'] = true; }}
+          onMouseUp={() => { keysRef.current['ArrowUp'] = false; }}
         >
           ⬆️
         </button>
@@ -294,8 +296,8 @@ export default function Game() {
             fontSize: '28px',
             pointerEvents: 'auto',
           }}
-          onTouchStart={(e) => { e.preventDefault(); fireBullet(); }}
-          onMouseDown={() => { fireBullet(); }}
+          onTouchStart={(e) => { e.preventDefault(); fireBulletRef.current?.(); }}
+          onMouseDown={() => { fireBulletRef.current?.(); }}
         >
           🔫
         </button>
